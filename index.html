@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Código & Caos — Juego de cartas</title>
+  <meta name="description" content="Código & Caos: TCG que fusiona programación y fantasía medieval." />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <style>
+    /* RESET */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#0f1724 0%, #0b1220 60%), #05060a;
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+
+    /* LAYOUT */
+    .container{max-width:1100px;margin:0 auto;padding:28px;}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo .mark{width:48px;height:48px;background:linear-gradient(135deg,#ffd166,#ef476f);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#08122a}
+    nav a{color:rgba(230,238,248,.85);text-decoration:none;margin-left:16px;font-weight:600}
+    .cta{background:linear-gradient(90deg,#ffd166,#ef476f);color:#08122a;padding:10px 14px;border-radius:8px;font-weight:700;box-shadow:0 6px 18px rgba(239,71,111,.12);cursor:pointer;border:0}
+
+    /* HERO */
+    .hero{
+      display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;padding:36px 0;
+    }
+    .hero h1{font-size:38px;line-height:1.02;margin-bottom:12px}
+    .hero p.lead{color:rgba(230,238,248,.9);margin-bottom:18px}
+    .card-stats{display:flex;gap:12px;margin-top:18px}
+    .stat{background:rgba(255,255,255,.04);padding:10px 14px;border-radius:10px;font-weight:700}
+
+    /* CARD PREVIEW */
+    .card-preview{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.04)}
+    .card-preview .title{font-weight:800;margin-bottom:6px}
+    .card-preview pre{background:rgba(0,0,0,.3);padding:12px;border-radius:8px;overflow:auto;color:#e6eef8;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:13px}
+
+    /* SECTIONS */
+    section{padding:40px 0;border-top:1px dashed rgba(255,255,255,.03)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .box{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));padding:18px;border-radius:10px;border:1px solid rgba(255,255,255,.04)}
+    h2.section-title{font-size:22px;margin-bottom:12px;color:#fff}
+
+    /* FEATURES */
+    .features .feature{display:flex;gap:12px;align-items:flex-start}
+    .icon-circle{width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-weight:800}
+
+    /* TABLET / MOBILE */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr; text-align:center}
+      nav{display:none}
+      .grid-3{grid-template-columns:1fr}
+      .card-preview{margin:0 auto;max-width:420px}
+    }
+
+    /* FOOTER */
+    footer{padding:24px 0;color:rgba(230,238,248,.7);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .social a{margin-left:10px;color:rgba(230,238,248,.7);text-decoration:none;font-weight:700}
+    .small{font-size:13px;color:rgba(230,238,248,.6)}
+    /* FORM */
+    .contact-grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
+    .form input,.form textarea{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.25);color:inherit;margin-bottom:10px}
+    .form button{width:100%;padding:12px;border-radius:8px;border:0;background:linear-gradient(90deg,#38bdf8,#7c3aed);font-weight:800;cursor:pointer;color:#061025}
+    .map-placeholder{background:linear-gradient(180deg,#081129,#05101d);padding:12px;border-radius:10px;height:100%;min-height:260px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-weight:700;border:1px dashed rgba(255,255,255,.03)}
+
+    /* ANIM */
+    .fade-up{transform:translateY(8px);opacity:0;transition:all .6s cubic-bezier(.2,.9,.3,1)}
+    .inview{transform:none;opacity:1}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="mark">C&C</div>
+        <div>
+          <div style="font-weight:800">Código & Caos</div>
+          <div style="font-size:13px;color:rgba(230,238,248,.6)">TCG — Programación & Fantasía</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#inicio">Inicio</a>
+        <a href="#mundo">El Mundo</a>
+        <a href="#mecanicas">Mecánicas</a>
+        <a href="#cartas">Cartas</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <button class="cta" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contacto</button>
+    </header>
+
+    <!-- HERO -->
+    <main id="inicio" class="hero" role="main" aria-label="Presentación Código y Caos">
+      <div>
+        <h1 class="fade-up">Código & Caos — Donde el código se vuelve conjuro</h1>
+        <p class="lead fade-up">Un juego de cartas coleccionables que fusiona la fantasía medieval con la lógica de la programación. Crea cartas, diseña hechizos y domina las batallas con ingenio y estrategia.</p>
+        <div class="card-stats fade-up">
+          <div class="stat">Modo: Web & Físico</div>
+          <div class="stat">Audiencia: Adolescentes</div>
+          <div class="stat">Prototipo: 7 semanas</div>
+        </div>
+
+        <div style="margin-top:20px" class="fade-up">
+          <button class="cta" onclick="document.getElementById('mecanicas').scrollIntoView({behavior:'smooth'})">Ver mecánicas</button>
+        </div>
+      </div>
+
+      <aside class="card-preview fade-up" aria-hidden="false">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div class="title">Fireball()</div>
+            <div style="font-size:13px;color:rgba(230,238,248,.6)">Hechizo — Daño directo</div>
+          </div>
+          <div style="font-weight:900;color:#08122a;background:#ffd166;padding:6px 10px;border-radius:8px">50 DMG</div>
+        </div>
+
+        <pre>
+def Fireball(target):
+    damage = 50
+    target.hp -= damage
+        </pre>
+
+        <div style="margin-top:10px;font-size:13px;color:rgba(230,238,248,.7)">
+          Las cartas se programan con pseudo-código simplificado; plantillas y reglas limitan su poder para mantener el equilibrio.
+        </div>
+      </aside>
+    </main>
+
+    <!-- EL MUNDO -->
+    <section id="mundo">
+      <h2 class="section-title">El Mundo Medieval</h2>
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <div class="box" style="flex:1;min-width:260px">
+          <h3 style="margin-bottom:8px">Ambientación</h3>
+          <p>Un universo donde caballeros, magos y criaturas digitales luchan en épicas batallas. Cada carta es fragmento de código que se transforma en un hechizo o habilidad.</p>
+        </div>
+
+        <div class="box" style="flex:1;min-width:260px">
+          <h3 style="margin-bottom:8px">Progresión</h3>
+          <ul style="margin-left:16px;color:rgba(230,238,248,.8);line-height:1.6">
+            <li>Aprendiz de Código → Ganas experiencia y desbloqueas cartas</li>
+            <li>Desbloquear cartas complejas y combinaciones avanzadas</li>
+            <li>Rango final: Arquitecto del Código</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- MECÁNICAS -->
+    <section id="mecanicas">
+      <h2 class="section-title">Mecánicas principales</h2>
+      <div class="grid-3 features">
+        <div class="box feature">
+          <div class="icon-circle">1</div>
+          <div>
+            <strong>Creación de Cartas</strong>
+            <p style="color:rgba(230,238,248,.75)">Seleccionás una "mica" y la programás con plantillas o código simplificado. El sistema limita el poder para garantizar equilibrio.</p>
+          </div>
+        </div>
+
+        <div class="box feature">
+          <div class="icon-circle">2</div>
+          <div>
+            <strong>Fases del duelo</strong>
+            <p style="color:rgba(230,238,248,.75)">Colocación (boca abajo) → Revelación y resolución de hechizos → Combate principal.</p>
+          </div>
+        </div>
+
+        <div class="box feature">
+          <div class="icon-circle">3</div>
+          <div>
+            <strong>Tipos de cartas</strong>
+            <p style="color:rgba(230,238,248,.75)">Cartas Principales, Hechizos (bonificaciones, penalizaciones, destrucción) y cartas especiales según personaje.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARTAS / EJEMPLOS -->
+    <section id="cartas">
+      <h2 class="section-title">Cartas & ejemplos</h2>
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <div class="box" style="flex:1;min-width:300px">
+          <h3>Guardián de Acero (Tanque)</h3>
+          <pre>
+class Guardian:
+    def __init__(self, hp=150, armor=10):
+        self.health = hp
+        self.defense_rating = armor
+
+    def absorb_damage(self, incoming_damage):
+        damage_taken = max(0, incoming_damage - self.defense_rating)
+        self.health -= damage_taken
+          </pre>
+          <p style="color:rgba(230,238,248,.7)">Alta salud y capacidad de absorber daño para proteger otras unidades.</p>
+        </div>
+
+        <div class="box" style="flex:1;min-width:300px">
+          <h3>Dinámica de juego</h3>
+          <ul style="margin-left:16px;color:rgba(230,238,248,.8);line-height:1.6">
+            <li>Gestión de recursos y construcción de mazos</li>
+            <li>Guerra psicológica en la fase de colocación</li>
+            <li>Curva de aprendizaje con plantillas y libertad para experimentar</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto">
+      <h2 class="section-title">Contacto</h2>
+      <div class="contact-grid">
+        <div>
+          <div class="box">
+            <h3>Escribinos</h3>
+            <form class="form" id="contactForm" onsubmit="return handleContact(event)">
+              <input type="text" id="nombre" placeholder="Nombre" required />
+              <input type="text" id="apellido" placeholder="Apellido" required />
+              <input type="email" id="email" placeholder="Correo electrónico" required />
+              <textarea id="mensaje" rows="5" placeholder="Tu mensaje" required></textarea>
+              <button type="submit">Enviar mensaje</button>
+              <div id="formMsg" class="small" style="margin-top:8px;display:none"></div>
+            </form>
+          </div>
+
+          <div style="margin-top:12px;color:rgba(230,238,248,.7);font-size:13px">
+            <strong>Dirección:</strong> La Matanza, Buenos Aires<br />
+            <strong>Plataforma:</strong> Web & Físico<br />
+            <strong>Plazo prototipo:</strong> 7 semanas
+          </div>
+        </div>
+
+        <div>
+          <div class="map-placeholder box" id="map">
+            <!-- Si querés, pegá aquí el iframe de Google Maps o la API -->
+            <div style="text-align:center">
+              <div>Mapa / Ubicación</div>
+              <div class="small" style="margin-top:8px">Pegar iframe de Google Maps aquí para mostrar Citlam u otra ubicación</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="small">© Código & Caos — Proyecto estudiantil</div>
+      <div class="social">
+        <a href="#" aria-label="Twitter">Twitter</a>
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="Discord">Discord</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Simple JS: animaciones, manejo de formulario (local)
+    document.addEventListener('DOMContentLoaded', () => {
+      // animar elementos cuando entren en vista
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) e.target.classList.add('inview');
+        });
+      }, {threshold: .08});
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    });
+
+    function handleContact(e){
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value.trim();
+      const apellido = document.getElementById('apellido').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const mensaje = document.getElementById('mensaje').value.trim();
+      const formMsg = document.getElementById('formMsg');
+
+      // validación básica
+      if(!nombre || !apellido || !email || !mensaje){
+        formMsg.style.display = 'block';
+        formMsg.style.color = '#f43f5e';
+        formMsg.textContent = 'Completá todos los campos antes de enviar.';
+        return false;
+      }
+
+      // Simulación de envío (sin servidor). Podés reemplazar con fetch() a tu backend.
+      formMsg.style.display = 'block';
+      formMsg.style.color = '#60a5fa';
+      formMsg.textContent = 'Enviando mensaje...';
+
+      setTimeout(() => {
+        formMsg.style.color = '#34d399';
+        formMsg.textContent = '¡Mensaje enviado correctamente! Te responderemos a la brevedad.';
+        document.getElementById('contactForm').reset();
+      }, 900);
+
+      return false;
+    }
+
+    // small helper: scroll to fragment on load if present
+    if(location.hash){
+      const el = document.querySelector(location.hash);
+      if(el) setTimeout(()=> el.scrollIntoView({behavior:'smooth'}),200);
+    }
+  </script>
+</body>
+</html>
