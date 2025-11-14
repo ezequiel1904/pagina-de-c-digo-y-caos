@@ -119,12 +119,15 @@
     #final-card-image {
       width: 100%;
       height: 200px;
-      background-size: cover;
-      background-position: center;
+      /* Mostrar la parte superior de la imagen para que cabeceras/banderas no queden recortadas */
+      background-size: contain;
+      background-position: top center;
+      background-repeat: no-repeat;
       background-color: #334155;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
+      padding-top: 8px; /* separación estética cuando la imagen contiene texto en la parte superior */
       font-weight: bold;
       color: rgba(255,255,255,0.3);
     }
