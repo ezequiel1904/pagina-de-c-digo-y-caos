@@ -1,167 +1,19 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Código & Caos — Creador de Cartas</title>
   <meta name="description" content="Crea tus propias cartas para el juego Código & Caos." />
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-  <style>
-    /* RESET */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: linear-gradient(180deg,#0f1724 0%, #0b1220 60%), #05060a;
-      color:#e6eef8;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.5;
-    }
-
-    /* LAYOUT */
-    .container{max-width:1200px;margin:0 auto;padding:28px;}
-    .creator-grid{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 28px;
-      align-items: flex-start;
-    }
-    .selection-column, .editor-column, .preview-column {
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 18px;
-      color: #ffd166;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 10px;
-    }
-
-    /* SELECTION STYLES */
-    .selector-group { margin-bottom: 24px; }
-    .selector-group h3 { margin-bottom: 12px; font-size: 18px; }
-    .item-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 12px;
-    }
-    .selectable-item {
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-      padding: 8px;
-      background: rgba(0,0,0,0.2);
-    }
-    .selectable-item:hover {
-      border-color: #ef476f;
-      transform: translateY(-3px);
-    }
-    .selectable-item.selected {
-      border-color: #ffd166;
-      box-shadow: 0 0 15px rgba(255, 209, 102, 0.3);
-    }
-    .selectable-item img {
-      width: 100%;
-      height: auto;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-    .selectable-item span {
-        font-weight: 600;
-        font-size: 14px;
-    }
-
-    /* EDITOR STYLES */
-    #card-editor {
-      background: #080c16;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 12px;
-      font-family: 'Courier New', Courier, monospace;
-      color: #a7e0ff;
-      width: 100%;
-      height: 200px;
-      resize: vertical;
-      font-size: 14px;
-    }
-    .templates { margin-top: 12px; }
-    .template-btn {
-      background: #334155;
-      border: 1px solid #475569;
-      color: #e2e8f0;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-right: 8px;
-      font-size: 13px;
-    }
-    .template-btn:hover { background: #475569; }
-
-    /* PREVIEW STYLES */
-    .card-preview-wrapper {
-      position: sticky;
-      top: 28px;
-    }
-    #final-card {
-      background: #1e293b;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      min-height: 450px;
-      transition: all 0.3s ease;
-    }
-    #final-card-image {
-      width: 100%;
-      height: 200px;
-      /* Mostrar la parte superior de la imagen para que cabeceras/banderas no queden recortadas */
-      background-size: contain;
-      background-position: top center;
-      background-repeat: no-repeat;
-      background-color: #334155;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding-top: 8px; /* separación estética cuando la imagen contiene texto en la parte superior */
-      font-weight: bold;
-      color: rgba(255,255,255,0.3);
-    }
-    .card-content { padding: 16px; }
-    #final-card-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 8px;
-        color: #fff;
-    }
-    #final-card-type {
-        font-size: 14px;
-        color: #94a3b8;
-        margin-bottom: 12px;
-        font-style: italic;
-    }
-    #final-card-description {
-        background: rgba(0,0,0,0.2);
-        padding: 10px;
-        border-radius: 6px;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 14px;
-        color: #cbd5e1;
-        white-space: pre-wrap;
-        min-height: 100px;
-    }
-    .placeholder-text {
-      color: rgba(255,255,255,0.4);
-      padding: 20px;
-      text-align: center;
-    }
-
-  </style>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
 </head>
+
 <body>
 
   <div class="container">
@@ -201,157 +53,32 @@
           </div>
         </div>
         <div id="editor-placeholder" class="placeholder-text">
-            <p>Selecciona un personaje y una mica para empezar a codificar.</p>
+          <p>Selecciona un personaje y una mica para empezar a codificar.</p>
         </div>
       </div>
 
       <!-- COLUMNA DE VISTA PREVIA -->
       <div class="preview-column">
-          <div class="card-preview-wrapper">
-              <h2>Resultado Final</h2>
-              <div id="final-card">
-                  <div id="final-card-image">SELECCIONA UNA MICA</div>
-                  <div class="card-content">
-                      <h3 id="final-card-title">Nombre de la Carta</h3>
-                      <p id="final-card-type">Tipo de Carta</p>
-                      <pre id="final-card-description">El efecto de tu código aparecerá aquí.</pre>
-                  </div>
-              </div>
+        <div class="card-preview-wrapper">
+          <h2>Resultado Final</h2>
+          <div id="final-card">
+            <div id="final-card-image">SELECCIONA UNA MICA</div>
+            <div class="card-content">
+              <h3 id="final-card-title">Nombre de la Carta</h3>
+              <p id="final-card-type">Tipo de Carta</p>
+              <pre id="final-card-description">El efecto de tu código aparecerá aquí.</pre>
+            </div>
           </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // --- DATOS DEL JUEGO (Simulando una base de datos) ---
-      const characters = [
-        { id: 'guerrero', name: 'Guerrero', image: 'personaje_Guerrero.png' },
-        { id: 'mago', name: 'Mago', image: 'Personaje_mago.png' }
-      ];
-
-      const micas = [
-        { 
-          id: 'depuracion_emergencia', 
-          name: 'Depuración de Emergencia', 
-          type: 'Hechizo (H)',
-          image: 'depurador.png',
-          description: 'Una carta de "pánico" si la situación se complica.'
-        },
-        { 
-          id: 'golem_algoritmico', 
-          name: 'Gólem Algorítmico', 
-          type: 'Principal (P)',
-          image: 'golem-algoritmico.png',
-          description: 'Invoca una criatura para que luche por ti.'
-        }
-      ];
-      
-      const templates = {
-        ataque: `función Ataque(objetivo) {\n  daño = 50;\n  objetivo.salud -= daño;\n  notificar("Ataque directo de 50 pts.");\n}`,
-        defensa: `función Escudo() {\n  otorgar_escudo(30);\n  estado = "Defensa activa";\n  notificar("Escudo de 30 pts. activado.");\n}`,
-        utilidad: `función RobarCarta() {\n  robar(1);\n  notificar("Robas 1 carta del mazo.");\n}`
-      };
-
-      // --- ESTADO DE LA APLICACIÓN ---
-      let selectedCharacter = null;
-      let selectedMica = null;
-
-      // --- ELEMENTOS DEL DOM ---
-      const characterSelector = document.getElementById('character-selector');
-      const micaSelector = document.getElementById('mica-selector');
-      const editorContainer = document.getElementById('editor-container');
-      const editorPlaceholder = document.getElementById('editor-placeholder');
-      const cardEditor = document.getElementById('card-editor');
-      
-      const finalCardImage = document.getElementById('final-card-image');
-      const finalCardTitle = document.getElementById('final-card-title');
-      const finalCardType = document.getElementById('final-card-type');
-      const finalCardDescription = document.getElementById('final-card-description');
-
-      // --- FUNCIONES ---
-      
-      // Función para renderizar items seleccionables
-      function renderSelectableItems(container, items, type) {
-        container.innerHTML = '';
-        items.forEach(item => {
-          const itemEl = document.createElement('div');
-          itemEl.className = 'selectable-item';
-          itemEl.dataset.id = item.id;
-          itemEl.innerHTML = `<img src="${item.image}" alt="${item.name}"><span>${item.name}</span>`;
-          
-          itemEl.addEventListener('click', () => handleSelection(type, item, itemEl));
-          container.appendChild(itemEl);
-        });
-      }
-
-      // Función para manejar la selección de personaje y mica
-      function handleSelection(type, item, element) {
-        if (type === 'character') {
-          selectedCharacter = item;
-          updateSelectionUI(characterSelector, element);
-        } else if (type === 'mica') {
-          selectedMica = item;
-          updateSelectionUI(micaSelector, element);
-          updateCardPreview();
-        }
-        checkEditorVisibility();
-      }
-      
-      // Función para actualizar la UI de selección
-      function updateSelectionUI(container, selectedElement) {
-        // Quita la clase 'selected' de todos los elementos en el contenedor
-        container.querySelectorAll('.selectable-item').forEach(el => el.classList.remove('selected'));
-        // Agrega la clase 'selected' al elemento clickeado
-        selectedElement.classList.add('selected');
-      }
-
-      // Función para mostrar/ocultar el editor
-      function checkEditorVisibility() {
-        if (selectedCharacter && selectedMica) {
-          editorPlaceholder.style.display = 'none';
-          editorContainer.style.display = 'block';
-        } else {
-          editorPlaceholder.style.display = 'block';
-          editorContainer.style.display = 'none';
-        }
-      }
-
-      // Función para actualizar la vista previa de la carta
-      function updateCardPreview() {
-        if (selectedMica) {
-          finalCardImage.style.backgroundImage = `url(${selectedMica.image})`;
-          finalCardImage.textContent = ''; // Limpiar texto de placeholder
-          finalCardTitle.textContent = selectedMica.name;
-          finalCardType.textContent = `${selectedMica.type} - Creada por ${selectedCharacter ? selectedCharacter.name : 'Invocador'}`;
-        }
-        
-        const code = cardEditor.value;
-        if(code){
-            finalCardDescription.textContent = code;
-        } else {
-            finalCardDescription.textContent = selectedMica ? selectedMica.description : 'El efecto de tu código aparecerá aquí.';
-        }
-      }
-
-      // Event listener para el editor de texto
-      cardEditor.addEventListener('input', updateCardPreview);
-      
-      // Event listeners para los botones de plantilla
-      document.querySelectorAll('.template-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const templateKey = btn.dataset.template;
-          if (templates[templateKey]) {
-            cardEditor.value = templates[templateKey];
-            updateCardPreview();
-          }
-        });
-      });
-
-      // --- INICIALIZACIÓN ---
-      renderSelectableItems(characterSelector, characters, 'character');
-      renderSelectableItems(micaSelector, micas, 'mica');
-    });
-  </script>
+  <!-- CodeMirror JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+  <script src="js/app.js"></script>
 </body>
+
 </html>
